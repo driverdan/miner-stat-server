@@ -38,16 +38,37 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 
 var io = require('socket.io').listen(server);
 
-var summary = {};
+var servers = [];
 
 io.sockets.on('connection', function (socket) {
   // Send last summary
-  socket.emit('summary', summary);
+  socket.emit('summary', servers);
 
   socket.on('miner:summary', function (data) {
-    summary = data;
+    var found = false,
+        newServers = [];
+
+    servers.forEach(function (server) {
+      var newServer;
+
+      if (data.id === server.id) {
+        newServer = data;
+        found = true;
+      } else {
+        newServer = server;
+      }
+
+      newServers.push(newServer);
+    });
+
+    if (!found) {
+      newServers.push(data);
+    }
+
+    servers = newServers;
+
     // Re-emit so browser will see it
-    socket.broadcast.emit('summary', data);
+    socket.broadcast.emit('summary', servers);
   });
 });
 

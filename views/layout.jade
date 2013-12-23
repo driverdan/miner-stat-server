@@ -1,10 +1,13 @@
 doctype html
 html
   head
-    title= title
+    title cgminer status
+    link(rel='stylesheet', href='/stylesheets/foundation.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block content
 
     script(src='/socket.io/socket.io.js')
-    script(src='/javascripts/script.js')
+    script(src='/javascripts/react-0.8.0.js')
+    script(src='/javascripts/JSXTransformer-0.8.0.js')
+    script(src='/javascripts/script.js' type='text/jsx')

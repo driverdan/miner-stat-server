@@ -31,6 +31,9 @@ var App = React.createClass({
   }
 });
 
+/**
+ * Summary of all server stats
+ */
 var StatSummary = React.createClass({
   render: function () {
     var curHashRate = 0, avgHashRate = 0;
@@ -68,6 +71,28 @@ var Servers = React.createClass({
 });
 
 /**
+ * Convert seconds to a nice time string
+ */
+var secondsToString = function (seconds) {
+  var days = Math.floor(seconds / 86400),
+      hours = Math.floor(seconds % 86400 / 3600),
+      minutes = Math.floor(seconds % 86400 % 3600 / 60),
+      result = [];
+
+  if (days) {
+    result.push(days + ' d');
+  }
+  if (hours) {
+    result.push(hours + ' h');
+  }
+  if (minutes) {
+    result.push(minutes + ' m');
+  }
+
+  return result.join(' ');
+};
+
+/**
  * Individual server info
  */
 var Server = React.createClass({
@@ -82,6 +107,7 @@ var Server = React.createClass({
       <div className="small-12 medium-6 columns">
         <div className="panel">
           <h2>{this.props.key}</h2>
+          <h3><small>Up {secondsToString(data.Elapsed)}</small></h3>
           <ul>
             {summary}
           </ul>

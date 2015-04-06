@@ -1,17 +1,28 @@
-
 /**
- * Module dependencies.
+ * Main application
  */
 
 var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var conf = require('nconf');
+
+// Load config
+conf
+  .argv()
+  .env()
+  .file('config.json')
+  .defaults({
+    port: 3000,
+    cookie_secret: 'change me!'
+  });
 
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 8080);
+app.set('port', conf.get('port'));
+// View path and engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -19,7 +30,8 @@ app.use(express.logger('default'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser('IOU&ow43iuahfdksgAUSYFgoaweguhaslkfh'));
+// Set secret for cookie
+app.use(express.cookieParser(conf.get('cookie_secret')));
 app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
@@ -39,37 +51,41 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 
 var io = require('socket.io').listen(server);
 
-var servers = [];
+// List of miners
+var miners = [];
 
+// When a user connects...
 io.sockets.on('connection', function (socket) {
-  // Send last summary
-  socket.emit('summary', servers);
+  // Send summary, which is the array of miner data
+  socket.emit('summary', miners);
 
+  // Miner submitted updated summary data
   socket.on('miner:summary', function (data) {
-    var found = false,
-        newServers = [];
+    var found = false;
+    var newMiners = [];
 
-    servers.forEach(function (server) {
-      var newServer;
+    // Replace existing miner data with new data
+    miners.forEach(function (miner) {
+      var newMiner;
 
-      if (data.id === server.id) {
-        newServer = data;
+      if (data.id === miner.id) {
+        newMiners = data;
         found = true;
       } else {
-        newServer = server;
+        newMiner = miner;
       }
 
-      newServers.push(newServer);
+      newMiners.push(newMiner);
     });
 
     if (!found) {
-      newServers.push(data);
+      newMiners.push(data);
     }
 
-    servers = newServers;
+    miners = newMiners;
 
     // Re-emit so browser will see it
-    socket.broadcast.emit('summary', servers);
+    socket.broadcast.emit('summary', miners);
   });
 });
 

@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('http://localhost:3000');
 
 socket.on('connect', function () {
   console.log('connected');
@@ -38,7 +38,9 @@ var StatSummary = React.createClass({
   render: function () {
     var curHashRate = 0, avgHashRate = 0;
 
+    // Calculate hash rates
     this.props.servers.forEach(function (server) {
+      // Cast to numbers
       curHashRate += server.summary['MHS 5s'] * 1;
       avgHashRate += server.summary['MHS av'] * 1;
     });
@@ -104,7 +106,7 @@ var Server = React.createClass({
     });
 
     return (
-      <div className="small-12 medium-6 columns">
+      <div className="small-12 medium-4 columns">
         <div className="panel">
           <h2>{this.props.key}</h2>
           <h3><small>Up {secondsToString(data.Elapsed)}</small></h3>

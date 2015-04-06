@@ -119,7 +119,7 @@ var Server = React.createClass({
   }
 });
 
-React.renderComponent(
+React.render(
   <App />,
   document.getElementById('statuses')
 );

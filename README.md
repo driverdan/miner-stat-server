@@ -16,4 +16,13 @@ Each client needs to run [miner-broadcast](https://github.com/driverdan/miner-br
 
 ## Running
 
+Use `npm build` to build the front end JS. `npm watch` can be used during
+development to watch for changes.
+
+`npm start` is used to run the server.
+
 It is strongly recommended to use a process manager like [PM2](https://github.com/Unitech/pm2) to run this.
+
+## Testing
+
+Run a fake test miner with `node test/miner.js`.

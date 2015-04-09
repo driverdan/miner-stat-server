@@ -70,7 +70,7 @@ io.sockets.on('connection', function (socket) {
       var newMiner;
 
       if (data.id === miner.id) {
-        newMiners = data;
+        newMiner = data;
         found = true;
       } else {
         newMiner = miner;

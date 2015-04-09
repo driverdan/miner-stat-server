@@ -3,4 +3,5 @@ dist
 .tmp
 .sass-cache
 .DS_Store
-./config.json
+/config.json
+/public/javascripts/script.js

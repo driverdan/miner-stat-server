@@ -7,6 +7,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var conf = require('nconf');
+var JSX = require('node-jsx').install({extension: '.jsx'});
 
 // Load config
 conf

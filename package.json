@@ -16,13 +16,31 @@
   },
   "bugs": "http://github.com/driverdan/miner-stat-server/issues",
   "scripts": {
+    "watch": "watchify client.jsx -o public/javascripts/script.js -v",
+    "browserify": "browserify client.jsx | uglifyjs > public/javascripts/script.js",
+    "build": "npm run browserify",
     "start": "node app.js"
   },
   "dependencies": {
     "express": "3.4.x",
     "jade": "*",
     "stylus": "*",
+    "socket.io-client": "1.3.x",
     "socket.io": "1.3.x",
-    "nconf": "0.7.x"
+    "nconf": "0.7.x",
+    "node-jsx": "0.12.x",
+    "react": "0.13.x"
+  },
+  "devDependencies": {
+    "uglify-js": "^2.4.19",
+    "nodemon": "^1.3.7",
+    "watchify": "^3.1.0",
+    "browserify": "^9.0.7",
+    "reactify": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
   }
 }
